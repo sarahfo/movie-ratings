@@ -24,42 +24,72 @@ def index():
 
     return render_template("homepage.html")
 
+
 @app.route('/users')
 def user_list():
     """Show list of users."""
-    
+
     users = User.query.all()
-    
+
     return render_template("user_list.html", users=users)
 
-@app.route('/log_in')
-def log_in():  
 
+@app.route('/log_in')
+def show_login():
     return render_template("log_in.html")
 
-@app.route('/loginsuccessful', methods=["POST"])
-def return_home():
 
-    email = request.form.get("email") 
-    password = request.form.get("password")
+@app.route('/loginsuccessful', methods=['POST'])
+def login():
     """getting the text from input form and assigning it variable names"""
+    email = request.form["email"]
+    password = request.form["password"]
 
-    q = User.query.filter_by(email=email, password=password).one()
-    """querying the user table/class to see if the email/password input 
-    matches with email/password in user table/class""" 
-    user_id = q.user_id
+    """querying the user table/class to see if the email/password input
+    # matches with email/password in user table/class"""
+
+    q = User.query.filter_by(email=email, password=password).all()
+    # an alternate way to do this which is much simpler is elim .all and use .one or .first
+    # if q:
+        # user_id = q.user_id  (q is now an object bc we used one/first)
+        # session['user_id'] = user_id
+        # flash("You've successfully logged in!")
+        # return render_template('homepage.html')
+    # else:
+    # #   flash("Invalid information.")
+    #     return render_template('log_in.html')
+    if q == []:
+        flash("Invalid information.")
+        return render_template('log_in.html')
+    else:
+        user_id = q[0].user_id
+        session['user_id'] = user_id
+        flash("You've successfully logged in!")
+        return render_template('homepage.html')
 
 
-    session['user_id'] = user_id
-    #returns the id associated with the object/row 
+@app.route('/registrationsuccess', methods=['POST'])
+def register():
+    """taking registraion info and adding to our database"""
+    email = request.form["email"]
+    password = request.form["password"]
+    age = int(request.form["age"])
+    zipcode = request.form["zipcode"]
 
-   #later, we might add if statement for error in login/authentication data.
-    
-    flash('You have successfully logged in')
+    q = User.query.filter_by(email=email).all()
+ 
+    if q:
+        flash("This email already had an account.")
+        return render_template('log_in.html')
+    else:
+        add_user = User(email=email, password=password, age=age,
+                        zipcode=zipcode)
+        db.session.add(add_user)
+        db.session.commit()
+        flash("Welcome to the Realm of the Judgemental Eye!")
+        return render_template('homepage.html')
 
-    return redirect("/homepage")
-
-
+# TO COME:  LOG OUT THING!  Flash message: Logged Out.  Probably need a button.
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

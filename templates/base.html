@@ -2,12 +2,12 @@
 <html>
 <head>
   <title>Ratings</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
     <body>
         Ratings
         <hr>
-
         <ul>
             {% for message in get_flashed_messages() %}
                 <li> {{ message }} </li>

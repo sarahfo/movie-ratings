@@ -28,10 +28,11 @@ class User(db.Model):
 
         return "<User user_id=%s email=%s>" % (self.user_id, self.email)
 
+
 class Movie(db.Model):
     """Table of movies and movie info"""
 
-    __tablename__= "movies"
+    __tablename__ = "movies"
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64), nullable=True)

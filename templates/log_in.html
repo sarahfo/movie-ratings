@@ -1,19 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<h3>Log In</h3>
-<form action="/homepage" method="POST">
-    <label>Email:
-        <input type="text" name="email">
-    </label>
-    <br>
-    <br>
-    <label>Password:
-        <input type="text" name="password">
-    </label>
-    <br>
-    <br>
-    <input type="submit">
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <h3>Log In</h3>
+            <form id ="login" method="POST" action="/loginsuccessful">
+                <label>Email:
+                    <br>
+                    <input type="text" name="email">
+                </label>
+            <br>
+            <br>
+                <label>Password:
+                    <br>
+                    <input type="password" name="password">
+                </label>
+            <br>
+            <br>
+                <input type="submit" value="Log In">
+            </form>
+        </div>
+        <div class="col-xs-12 col-md-8">
+            <h3>Register</h3>
+            <form id="reg" method="POST" action="/registrationsuccess">
+                <label>Email:
+                    <br>
+                    <input type="text" name="email">
+                </label>
+            <br>
+            <br>
+                <label>Enter a Password:
+                    <br>
+                    <input type="text" name="password">
+                </label>
+            <br>
+            <br>
+                <label>Age:
+                    <br>
+                    <input type="number" name="age" min="12" max="100">
+                </label>
+            <br>
+            <br>
+                <label>Zipcode:
+                    <br>
+                    <input type="text" name="zipcode" maxlength="5">
+                </label>
+            <br>
+            <br>
+                    <input type="submit" value="Register">
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
