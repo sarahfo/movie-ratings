@@ -65,31 +65,76 @@ def login():
         user_id = q[0].user_id
         session['user_id'] = user_id
         flash("You've successfully logged in!")
-        return render_template('homepage.html')
+        return redirect('/')
 
 
-@app.route('/registrationsuccess', methods=['POST'])
+@app.route('/registration', methods=['POST'])
 def register():
-    """taking registraion info and adding to our database"""
+    """taking registration info and adding to our database"""
     email = request.form["email"]
     password = request.form["password"]
     age = int(request.form["age"])
     zipcode = request.form["zipcode"]
 
     q = User.query.filter_by(email=email).all()
- 
+
     if q:
         flash("This email already had an account.")
-        return render_template('log_in.html')
+        return redirect('/log_in')
     else:
         add_user = User(email=email, password=password, age=age,
                         zipcode=zipcode)
         db.session.add(add_user)
         db.session.commit()
-        flash("Welcome to the Realm of the Judgemental Eye!")
-        return render_template('homepage.html')
+        user_id = add_user.user_id
+        print user_id
+        session['user_id'] = user_id
+        print session
 
-# TO COME:  LOG OUT THING!  Flash message: Logged Out.  Probably need a button.
+        flash("Welcome to the Realm of the Judgemental Eye!")
+        return redirect('/')
+
+
+@app.route('/loggedout')
+def logout():
+    """Log user out of account"""
+    if 'user_id' not in session:
+        return redirect('/log_in')
+    else:
+        session.pop('user_id', None)
+        flash("You've escaped my judgment....for now.")
+        return redirect('/')
+
+    print session
+
+
+@app.route('/users/<user_id>')
+def get_user_profile(user_id):
+    """Profile page for one specific user."""
+    # Query the User Table to get the age, User Id, Zip, Email.
+    u = User.query.get(user_id)
+    user_id = u.user_id
+    email = u.email
+    age = u.age
+    zipcode = u.zipcode
+
+    user_ratings = Rating.query.filter_by(user_id=user_id).all()
+    #user_ratings is a list of rating objects for the selected user_id
+
+    mvidlist = []
+    # print user_ratings[0].movie_id
+    for rating in user_ratings:    # going through each object in the list user_ratings, pulling movie ids associated
+        user_movie_id = Movie.query.get(rating.movie_id)   #movie_id is now a list of all movie ids for the user_id specified
+        mvidlist.append(user_movie_id)
+        # print mvidlist
+        #list of movie ids the user has rated
+    
+    for movie_id in mvidlist:
+        title = movie_id.title
+        print type(title)
+    
+    return render_template('user_profile.html', user_ratings=user_ratings, email=email, age=age, zipcode=zipcode, 
+                user_id=user_id, mvidlist=mvidlist)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

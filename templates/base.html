@@ -3,17 +3,25 @@
 <head>
   <title>Ratings</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+  
 </head>
 
     <body>
-        Ratings
-        <hr>
-        <ul>
-            {% for message in get_flashed_messages() %}
-                <li> {{ message }} </li>
+        <div class="container-fluid">
+            <a href="/">Ratings Homepage</a>
+            <div style="text-align: right">
+                <form id="button" action="/loggedout">
+                    <input type="submit" value="Log Out">
+                </form>
+            </div>
+            <hr>
+            <ul>
+                {% for message in get_flashed_messages() %}
+                    <li> {{ message }} </li>
 
-            {% endfor %}
-        </ul>
+                {% endfor %}
+            </ul>
+        </div>
 
         {% block content %} 
         
