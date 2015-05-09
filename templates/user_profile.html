@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <div>
+                <h3><u>User Profile Information</u></h3>
+                
+                Email: {{ email }}
+                <br>
+                User Id: {{ user_id }}
+                <br>
+                Age: {{ age }}
+                <br>
+                Zipcode: {{ zipcode }}
+
+            </div>
+            <br><br>
+            <div>
+                <h4><b>Movies you've rated:</b></h4>
+                <ul>
+                    
+                    {% for ratings in user_ratings %}
+                        {% for title in mvidlist %}
+                            <br>  
+                           Movie: {{ title.title }}                 
+                           Score: {{ ratings.score }}
+                           <br>
+
+                        {% endfor %}
+                    {% endfor %}
+
+
+
+                </li>
+                  
+                </ul>
+            </div> 
+       </div>
+    </div>
+</div>
+{% endblock %}
